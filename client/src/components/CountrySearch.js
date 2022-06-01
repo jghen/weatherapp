@@ -3,7 +3,6 @@ import './CountrySearch.css';
 
 const Countries = ({landSearch, countryArray}) => {
 
-  // console.log('countryArray' , countryArray)
   return (
     <React.Fragment>
       <label htmlFor="land-input"></label>

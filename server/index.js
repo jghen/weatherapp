@@ -22,16 +22,12 @@ app.use(cors());
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 
 const delayFetch = (seconds) => {
-  console.log('delay fetch');
   return new Promise(ok => setTimeout(ok, seconds * 1100));
 }
 
 app.get("/cities", async (req, res) =>{
   const countryCode = req.query.q;
-  console.log('code ', countryCode, typeof countryCode);
-
   const apiKey = process.env.RAPID_API_KEY;
-  console.log('api-Key rapid:', apiKey, typeof apiKey)
 
   const options = {
     method: 'GET',
@@ -53,8 +49,6 @@ app.get("/cities", async (req, res) =>{
       await delayFetch(1);
       let response = await fetch(url, options);
       let data = await response.json();
-      console.log('citydata, page: ',data.page, 'total pages: ', data.total_pages, 'data-message', data);
-      
       nextPage = data.links.next;
       totalPages = data.total_pages;
       thisPage = data.page;
@@ -77,16 +71,12 @@ app.get('/weather', async (req, res) =>{
   let countryCode = req.query.country
   
   city = (hasSpace(city)) ? city.split(' ').join('_'): city;
-  console.log('city: ',city);
-  console.log('countryCode: ',countryCode);
   const apiKey = process.env.OWM_API_KEY_VALUE;
-  console.log('api-Key weather:', apiKey, typeof apiKey)
 
   try {
     await delayFetch(1);
     const resp = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city},,${countryCode}&limit=5&appid=${apiKey}`);
     const data = await resp.json();
-    console.log('weatherdata: ',data);
     const allWeather = await Promise.all(
       data.map(async function (place) {
         delayFetch(1);

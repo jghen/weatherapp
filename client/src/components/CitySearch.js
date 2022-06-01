@@ -3,7 +3,6 @@ import './CitySearch.css';
 
 const CitySearch = ({citySearchSubmit, currentCitySearch, cityArray}) => {
 
-  // console.log('CityArray:', cityArray);
   const cities = (!cityArray.length)? '...Loading': 
     cityArray.map((city, i) => {
       return( 
@@ -15,7 +14,6 @@ const CitySearch = ({citySearchSubmit, currentCitySearch, cityArray}) => {
         </option>
     )});
   
-
   return(
     <div className='Searchbar-wrapper'>
       <label htmlFor="city-input"></label>

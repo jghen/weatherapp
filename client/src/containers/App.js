@@ -21,7 +21,6 @@ class App extends React.Component {
     fetch("https://restcountries.com/v3.1/all")
       .then((resp) => resp.json())
       .then((data) => {
-        console.log(data);
         return this.setState({ countries: data });
       });
   };
@@ -33,21 +32,18 @@ class App extends React.Component {
 
   delayFetch = (seconds) => {
     setTimeout(() => {
-      console.log('delay 1s')
+      console.log('delaying fetch 1s');
     }, seconds * 1100);
   }
 
   fetchCities = async (code) => {
-    console.log('code', code)
-    console.log('<----------fetching cities----->')
-    console.log('this.state.code: ', this.state.countryCode);
+    
     
     let url = `/cities?q=${code}`;
 
     try {
       const resp = await fetch(url);
       const data = await resp.json();
-      console.log('cities: ', data);
       return this.setState({ cities: data });
     } catch (error) {
       this.setState({ cities: ["error"] });
@@ -60,9 +56,6 @@ class App extends React.Component {
     if (event.type==='click') {
       document.querySelector("#city-input").value = '';
     }
-    
-
-    console.log('prev countrycode ', prevStateCountryCode)
     
     if (event.target.value) {
       const countryMatch = this.state.countries.filter((country) => {
@@ -84,14 +77,9 @@ class App extends React.Component {
   onCitySearchChange = (event) => {
 
     const input = event.target.value;
-    console.log('this.state.cities.length: ',this.state.cities.length);
     
       if (input && this.state.cities.length) {
         this.setState({ citySearch: input });
-        // const filteredCities = this.state.cities.filter((city) => {
-        //   return city.name.toLowerCase().includes(input.toLowerCase());
-        // });
-        // this.setState({ cities: filteredCities });
       }
     return;
   };
@@ -108,7 +96,6 @@ class App extends React.Component {
       this.delayFetchAwait(1);
       const resp = await fetch(url);
       const data = await resp.json();
-      console.log('weather: ', data);
       return this.setState({weather: data});
 
     } catch (error) {
@@ -118,7 +105,6 @@ class App extends React.Component {
   };
 
   onCitySearchSubmit = (event) => {
-    console.log(event.keyCode)
     if (event.keyCode === 13 || event.type === "click") {
       const searchCity = document.querySelector("#city-input").value;
       this.getWeatherData(searchCity);
