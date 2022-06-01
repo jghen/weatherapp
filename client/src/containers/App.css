@@ -54,6 +54,17 @@ main {
   justify-content: space-evenly;
 }
 
+.btn-active {
+    animation: activateBtn .3s ease-in-out both;
+}
+
+@keyframes activateBtn {
+  from {
+    transform: scale(1);
+  }
+  to {transform: scale(.9);}
+}
+
 @media only screen and (min-width: 800px) {
   .App-header {
     flex-direction: row;

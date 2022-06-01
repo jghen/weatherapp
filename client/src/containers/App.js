@@ -27,21 +27,24 @@ class App extends React.Component {
 
   componentDidMount = () => {
     this.fetchCountries();
-    this.setState({countryCode: 'NO'});
+    // this.setState({ countryCode: "NO" });
   };
 
   delayFetch = (seconds) => {
     setTimeout(() => {
-      console.log('delaying fetch 1s');
+      console.log("delaying fetch 1s");
     }, seconds * 1100);
-  }
+  };
+  delayFetchAwait = (seconds) => {
+    console.log("delay fetch");
+    return new Promise((ok) => setTimeout(ok, seconds * 1100));
+  };
 
   fetchCities = async (code) => {
-    
-    
     let url = `/cities?q=${code}`;
 
     try {
+      await this.delayFetchAwait(1);
       const resp = await fetch(url);
       const data = await resp.json();
       return this.setState({ cities: data });
@@ -51,21 +54,25 @@ class App extends React.Component {
   };
 
   onLandSearchChange = (event) => {
-
     let prevStateCountryCode = this.state.countryCode;
-    if (event.type==='click') {
-      document.querySelector("#city-input").value = '';
+    if (event.type === "click") {
+      document.querySelector("#city-input").value = "";
     }
-    
+
     if (event.target.value) {
       const countryMatch = this.state.countries.filter((country) => {
-        return country.name.official.toLowerCase().includes(event.target.value.toLowerCase());
+        return event.target.value
+          .toLowerCase()
+          .includes(country.name.official.toLowerCase());
       });
       if (countryMatch.length === 1) {
         let newCountryCode = countryMatch[0].cca2;
         this.setState({ countryCode: newCountryCode });
-        
-        if ((newCountryCode !== prevStateCountryCode) || !(this.state.cities.length===0)) {
+
+        if (
+          newCountryCode !== prevStateCountryCode ||
+          !(this.state.cities.length === 0)
+        ) {
           this.delayFetch(1);
           this.fetchCities(newCountryCode);
         }
@@ -75,19 +82,23 @@ class App extends React.Component {
   };
 
   onCitySearchChange = (event) => {
-
     const input = event.target.value;
-    
-      if (input && this.state.cities.length) {
-        this.setState({ citySearch: input });
-      }
+
+    if (input && this.state.cities.length) {
+      this.setState({ citySearch: input });
+    }
+    if (event.keyCode === 13) {
+      this.getWeatherData(input);
+      document.querySelector("#search-btn").active();
+      document.querySelector("#search-btn").focus();
+      // document.querySelector('#search-btn').classList.remove('btn-active');
+      // setTimeout(() => {
+
+      // }, 50);
+      // document.querySelector('#search-btn').classList.add('btn-active');
+    }
     return;
   };
-
-  delayFetchAwait = (seconds) => {
-    console.log('delay fetch');
-    return new Promise(ok => setTimeout(ok, seconds * 1100));
-  }
 
   getWeatherData = async (city) => {
     const url = `/weather?city=${city}&country=${this.state.countryCode}`;
@@ -96,12 +107,10 @@ class App extends React.Component {
       this.delayFetchAwait(1);
       const resp = await fetch(url);
       const data = await resp.json();
-      return this.setState({weather: data});
-
+      return this.setState({ weather: data });
     } catch (error) {
-      this.setState({weather: ['error']});
+      this.setState({ weather: ["error"] });
     }
-
   };
 
   onCitySearchSubmit = (event) => {
