@@ -1,19 +1,11 @@
-//api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
-// import fetch from 'node-fetch';
-// import cors from 'cors';
-// import express from 'express';
-// import dotenv from 'dotenv';
-// import path from 'path';
-// import { fileURLToPath } from 'url';
-// dotenv.config();
-require('dotenv').config();
 const express = require("express");
+require('dotenv').config();
 const cors = require('cors');
 const path = require('path');
 
 const fetch = require('node-fetch');
 
-var PORT = process.env.PORT || 5000
+var PORT = process.env.PORT || 5000;
 
 const app = express();
 
