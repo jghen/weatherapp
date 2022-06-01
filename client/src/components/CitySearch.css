@@ -1,0 +1,30 @@
+.Searchbar-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+#city-input {
+  width: 30%;
+}
+button {
+  margin:0 .4rem;
+  width: 3rem;
+}
+button:hover {
+  cursor: pointer;
+  transition: .2s ease-in-out;
+  background-color: #363b45;
+}
+button:active{
+  transform: scale(.9)
+}
+
+@media only screen and (min-width: 800px) {
+  #city-input{
+    width: 10rem;
+  }
+  .Searchbar-wrapper {
+    width: fit-content;
+  }
+}

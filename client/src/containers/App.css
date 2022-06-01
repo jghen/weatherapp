@@ -1,0 +1,65 @@
+:root, .App {
+  --border-color: cyan;
+  --border-radius: 5px;
+  --bg-input-button: #3b404b;
+  --text: #fff;
+  --bg-background: #282c34;
+  
+  background-color: var(--bg-input-button);
+  min-height: 100vh;
+  width: 100%;
+  font-size: calc(10px + 2vmin);
+  color: var(--text);
+
+}
+.App-header {
+  position: fixed;
+  z-index: 5;
+  width: 100%;
+  height: 9rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: var(--bg-background);
+}
+h1 {
+  /* color: var(--border-color); */
+  font-style: italic;
+  margin: 0 .4em;
+  text-align: center;
+}
+input, button {
+  font-size: calc(10px +2vmin);
+  height: 2rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  background-color: var(--bg-input-button);
+  color: var(--text);
+  text-transform: capitalize;
+}
+input {
+  text-indent: 5px;
+}
+input:focus {
+  outline: none;
+}
+input:hover {
+  opacity: .9;
+}
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+@media only screen and (min-width: 800px) {
+  .App-header {
+    flex-direction: row;
+    height: 5rem;
+  }
+  h1 {
+    width: stretch;
+  }
+}

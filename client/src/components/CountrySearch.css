@@ -1,0 +1,15 @@
+label {
+  display:none;
+}
+#land-input {
+  width: calc(3.2rem + 30%);
+  height: calc(2rem - 4px);
+}
+
+@media only screen and (min-width: 800px) {
+  #land-input {
+    width: stretch;
+    margin: 0 .6em 0 5%;
+    
+  }
+}

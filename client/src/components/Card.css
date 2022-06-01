@@ -1,0 +1,62 @@
+.card {
+  margin: .5rem 0;
+  background-color: var(--bg-background);
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius);
+  transition: .4s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+h1 {
+  margin: 0;
+  padding: 0;
+}
+p {
+  margin-left: 2%;
+}
+.card-content {
+  display: flex;
+  width: 90%;
+}
+.card-left-container, .card-right-container {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.card-right-container {
+  align-items: center;
+}
+.card:hover{
+  transform: scale(1.02);
+}
+
+.weather-img {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+.wind-dir {
+  transition: none;
+  width: 40px;
+  position: absolute;
+  z-index: 2;
+  margin-top: 9em;
+}
+
+@media only screen and (min-width: 800px) {
+  .card {
+    width: 45%;
+  }
+  .weather-img{
+    width: 110%;
+  }
+  .wind-dir {
+    width: 50px;
+    margin-top: 9.5rem;
+  }
+}
+
