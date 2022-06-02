@@ -14,6 +14,7 @@ class App extends React.Component {
       countryCode: "",
       countrySearch: "",
       citySearch: "",
+      isFetchingCities: null
     };
   }
 
@@ -30,118 +31,131 @@ class App extends React.Component {
     // this.setState({ countryCode: "NO" });
   };
 
-  delayFetch = (seconds) => {
-    setTimeout(() => {
-      console.log("delaying fetch 1s");
-    }, seconds * 1100);
-  };
-  delayFetchAwait = (seconds) => {
-    console.log("delay fetch");
-    return new Promise((ok) => setTimeout(ok, seconds * 1100));
-  };
+  render() {
+    const { weather, countries, cities, countryCode, isFetchingCities } = this.state;
 
-  fetchCities = async (code) => {
-    let url = `/cities?q=${code}`;
-    console.log('this.state.countryCode: ',this.state.countryCode);
-    console.log('passed countryCode',code);
-    if (code === this.state.countryCode) {
-      console.log('FetchCities: returning');
-      return;
-    }
-    try {
-      console.log('FetchCities - fetching: ', code);
-      await this.delayFetchAwait(1);
-      const resp = await fetch(url);
-      const data = await resp.json();
-      return this.setState({ cities: data });
-    } catch (error) {
-      this.setState({ cities: ["error"] });
-    }
-  };
-
-  onLandSearchChange = (event) => {
-    let prevStateCountryCode = this.state.countryCode;
-    // if (event.type === "click") {
-      document.querySelector("#city-input").value = "";
-    // }
-
-    if (event.target.value) {
-      const countryMatch = this.state.countries.filter((country) => {
-        return event.target.value
-          .toLowerCase()
-          .includes(country.name.official.toLowerCase());
+    // const delayFetch = (seconds) => {
+    //   setTimeout(() => {
+    //     console.log("delaying fetch 1s");
+    //   }, seconds * 1100);
+    // };
+    const delayFetchAwait = (seconds) => {
+      // console.log("delay fetch");
+      return new Promise((ok) => setTimeout(ok, seconds * 1100));
+    };
+    
+    const setStateAsync = (state) => {
+      return new Promise((resolve) => {
+        this.setState(state, resolve)
       });
-      if (countryMatch.length === 1) {
-        let newCountryCode = countryMatch[0].cca2;
-        this.setState({ countryCode: newCountryCode });
+  }
 
-        if (
-          newCountryCode !== prevStateCountryCode ||
-          !(this.state.cities.length === 0)
-        ) {
-          // this.delayFetch(1);
-          this.fetchCities(newCountryCode);
+    const fetchCities = async (code) => {
+      
+      let url = `/cities?q=${code}`;
+      // console.log("this.state.countryCode: ", countryCode);
+      // console.log("passed countryCode", code);
+      if (code === countryCode) {
+        // console.log("FetchCities: returning");
+        return;
+      }
+      try {
+        console.log("Fetching: ", code);
+        this.setState({isFetchingCities: true});
+        await delayFetchAwait(1);
+        const resp = await fetch(url);
+        const data = await resp.json();
+        await setStateAsync({isFetchingCities: false});
+        return this.setState({ cities: data });
+        
+      } catch (error) {
+        console.log('error: ', error)
+        this.setState({ cities: ["error"] });
+      }
+      
+    };
+
+
+    const onLandSearchChange = (event) => {
+      let prevStateCountryCode = countryCode;
+      // if (event.type === "click") {
+        const cityInput = document.querySelector("#city-input");
+        cityInput.value = "";
+        
+      // }
+      
+
+      if (event.target.value) {
+        const countryMatch = countries.filter((country) => {
+          return event.target.value
+            .toLowerCase()
+            .includes(country.name.official.toLowerCase());
+        });
+        if (countryMatch.length === 1) {
+          let newCountryCode = countryMatch[0].cca2;
+          this.setState({ countryCode: newCountryCode });
+
+          if (
+            newCountryCode !== prevStateCountryCode ||
+            !(cities.length === 0)
+          ) {
+            // delayFetch(1);
+            fetchCities(newCountryCode);
+          }
         }
       }
-    }
-    return false;
-  };
+      return false;
+    };
 
-  onCitySearchChange = (event) => {
-    const input = event.target.value;
+    const onCitySearchChange = (event) => {
+      const input = event.target.value;
 
-    if (input && this.state.cities.length) {
-      this.setState({ citySearch: input });
-    }
-    if (event.keyCode === 13) {
-      this.getWeatherData(input);
-      document.querySelector("#search-btn").click();
-      document.querySelector("#search-btn").focus();
-      // document.querySelector('#search-btn').classList.remove('btn-active');
-      // setTimeout(() => {
+      if (input && cities.length) {
+        this.setState({ citySearch: input });
+      }
+      if (event.keyCode === 13) {
+        getWeatherData(input);
+        const btn = document.querySelector("#search-btn");
+        btn.click();
+        btn.focus();
+      }
+      return;
+    };
 
-      // }, 50);
-      // document.querySelector('#search-btn').classList.add('btn-active');
-    }
-    return;
-  };
+    const getWeatherData = async (city) => {
+      const url = `/weather?city=${city}&country=${countryCode}`;
 
-  getWeatherData = async (city) => {
-    const url = `/weather?city=${city}&country=${this.state.countryCode}`;
+      try {
+        delayFetchAwait(1);
+        const resp = await fetch(url);
+        const data = await resp.json();
+        return this.setState({ weather: data });
+      } catch (error) {
+        this.setState({ weather: ["error"] });
+      }
+    };
 
-    try {
-      this.delayFetchAwait(1);
-      const resp = await fetch(url);
-      const data = await resp.json();
-      return this.setState({ weather: data });
-    } catch (error) {
-      this.setState({ weather: ["error"] });
-    }
-  };
-
-  onCitySearchSubmit = (event) => {
-    if (event.keyCode === 13 || event.type === "click") {
-      const searchCity = document.querySelector("#city-input").value;
-      this.getWeatherData(searchCity);
-    }
-    return false;
-  };
-
-  render() {
-    const { weather, countries, cities } = this.state;
+    const onCitySearchSubmit = (event) => {
+      if (event.keyCode === 13 || event.type === "click") {
+        const searchCity = document.querySelector("#city-input").value;
+        getWeatherData(searchCity);
+      }
+      return false;
+    };
 
     return (
       <div className="App">
         <header className="App-header">
           <h1>Værmelding</h1>
           <CountrySearch
-            landSearch={this.onLandSearchChange}
+            landSearch={onLandSearchChange}
             countryArray={countries}
           />
           <CitySearch
-            citySearchSubmit={this.onCitySearchSubmit}
-            currentCitySearch={this.onCitySearchChange}
+            citySearchSubmit={onCitySearchSubmit}
+            currentCitySearch={onCitySearchChange}
             cityArray={cities}
+            isFetching={isFetchingCities}
           />
         </header>
         <main>

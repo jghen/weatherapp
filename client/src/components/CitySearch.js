@@ -1,17 +1,48 @@
-import React from "react";
+import React from 'react';
 import "./CitySearch.css";
 
-const CitySearch = ({ citySearchSubmit, currentCitySearch, cityArray }) => {
-  console.log('cityArray: ', cityArray);
-  let cities = (cityArray.length>0)
-    ? cityArray.map((city, i) => {
+const CitySearch = ({citySearchSubmit, currentCitySearch, cityArray, isFetching }) => {
+
+  let cities;
+  // let citiesIsArray = Array.isArray(cityArray);
+  // console.log("cityArray: ",cityArray,"array:",citiesIsArray, 'length ', cityArray.length);
+  // console.log("fetching? ", isFetching);
+
+  
+
+  if (cityArray.length > 0) {
+    cities = cityArray.map((city, i) => {
       return (
         <option key={i} value={city.name}>
           {city.name}
         </option>
       );
-    })
-    : <option>...Loading</option>;
+    });
+  }
+
+
+ 
+
+  let placeholder = 'By';
+  const decidePlaceholder = () => {
+    
+    if (isFetching === true) {
+      placeholder = `...Loading`;
+    } 
+    
+    if (isFetching === false) {
+      if (cityArray.length) {
+        placeholder = "Chose a city!";
+      }
+      else if(cityArray.length===undefined) {
+        placeholder='unable to get data'
+      }
+      else {
+        placeholder = 'By'
+      }
+    } 
+    return placeholder;
+  };
 
   return (
     <div className="Searchbar-wrapper">
@@ -20,7 +51,7 @@ const CitySearch = ({ citySearchSubmit, currentCitySearch, cityArray }) => {
         id="city-input"
         onInput={currentCitySearch}
         onKeyDown={currentCitySearch}
-        placeholder="By"
+        placeholder={`${decidePlaceholder()}`}
         list="cities"
         autoComplete="on"
       />
