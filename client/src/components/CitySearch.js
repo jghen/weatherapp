@@ -2,15 +2,16 @@ import React from "react";
 import "./CitySearch.css";
 
 const CitySearch = ({ citySearchSubmit, currentCitySearch, cityArray }) => {
-  const cities = !cityArray.length
-    ? "...Loading"
-    : cityArray.map((city, i) => {
-        return (
-          <option key={i} value={city.name}>
-            {city.name}
-          </option>
-        );
-      });
+  console.log('cityArray: ', cityArray);
+  let cities = (cityArray.length>0)
+    ? cityArray.map((city, i) => {
+      return (
+        <option key={i} value={city.name}>
+          {city.name}
+        </option>
+      );
+    })
+    : <option>...Loading</option>;
 
   return (
     <div className="Searchbar-wrapper">
@@ -18,6 +19,7 @@ const CitySearch = ({ citySearchSubmit, currentCitySearch, cityArray }) => {
       <input
         id="city-input"
         onInput={currentCitySearch}
+        onKeyDown={currentCitySearch}
         placeholder="By"
         list="cities"
         autoComplete="on"

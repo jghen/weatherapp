@@ -7,6 +7,8 @@ const Countries = ({ landSearch, countryArray }) => {
       <label htmlFor="land-input"></label>
       <input
         onInput={landSearch}
+        onKeyDown={landSearch}
+        onClick={landSearch}
         placeholder="Land"
         id="land-input"
         list="lands"

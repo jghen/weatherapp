@@ -42,8 +42,14 @@ class App extends React.Component {
 
   fetchCities = async (code) => {
     let url = `/cities?q=${code}`;
-
+    console.log('this.state.countryCode: ',this.state.countryCode);
+    console.log('passed countryCode',code);
+    if (code === this.state.countryCode) {
+      console.log('FetchCities: returning');
+      return;
+    }
     try {
+      console.log('FetchCities - fetching: ', code);
       await this.delayFetchAwait(1);
       const resp = await fetch(url);
       const data = await resp.json();
@@ -55,9 +61,9 @@ class App extends React.Component {
 
   onLandSearchChange = (event) => {
     let prevStateCountryCode = this.state.countryCode;
-    if (event.type === "click") {
+    // if (event.type === "click") {
       document.querySelector("#city-input").value = "";
-    }
+    // }
 
     if (event.target.value) {
       const countryMatch = this.state.countries.filter((country) => {
@@ -73,7 +79,7 @@ class App extends React.Component {
           newCountryCode !== prevStateCountryCode ||
           !(this.state.cities.length === 0)
         ) {
-          this.delayFetch(1);
+          // this.delayFetch(1);
           this.fetchCities(newCountryCode);
         }
       }
@@ -89,7 +95,7 @@ class App extends React.Component {
     }
     if (event.keyCode === 13) {
       this.getWeatherData(input);
-      document.querySelector("#search-btn").active();
+      document.querySelector("#search-btn").click();
       document.querySelector("#search-btn").focus();
       // document.querySelector('#search-btn').classList.remove('btn-active');
       // setTimeout(() => {
