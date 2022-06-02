@@ -55,7 +55,7 @@ class App extends React.Component {
       // console.log("this.state.countryCode: ", countryCode);
       // console.log("passed countryCode", code);
       if (code === countryCode) {
-        // console.log("FetchCities: returning");
+        console.log("FetchCities: returning");
         return;
       }
       try {

@@ -48,9 +48,11 @@ app.get("/cities", async (req, res) =>{
       results.push(data);
     } while (totalPages > thisPage);
     const allCities = results.flatMap((result) => result.cities);
-    res.json(allCities);
+    console.log('cities in ', countryCode, ' :',allCities);
+    return res.json(allCities);
   } catch (error) {
-    res.json(error)
+    console.log('Server error: ',error);
+    return res.json('server error: '+ error);
   }
 })
 

@@ -3,9 +3,9 @@ import "./CitySearch.css";
 
 const CitySearch = ({citySearchSubmit, currentCitySearch, cityArray, isFetching }) => {
 
-  // let citiesIsArray = Array.isArray(cityArray);
-  // console.log("cityArray: ",cityArray,"array:",citiesIsArray, 'length ', cityArray.length);
-  // console.log("fetching? ", isFetching);
+  let citiesIsArray = Array.isArray(cityArray);
+  console.log("cityArray: ",cityArray,"array:",citiesIsArray, 'length ', cityArray.length);
+  console.log("fetching? ", isFetching);
   let cities;
   if (cityArray.length > 0) {
     cities = cityArray.map((city, i) => {
