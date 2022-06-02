@@ -33,11 +33,11 @@ class App extends React.Component {
   render() {
     const { weather, countries, cities, countryCode, isFetchingCities } = this.state;
 
-    const delayFetch = (seconds) => {
-      setTimeout(() => {
-        console.log("delaying fetch 1s");
-      }, seconds * 1100);
-    };
+    // const delayFetch = (seconds) => {
+    //   setTimeout(() => {
+    //     console.log("delaying fetch 1s");
+    //   }, seconds * 1100);
+    // };
     const delayFetchAwait = (seconds) => {
       // console.log("delay fetch");
       return new Promise((ok) => setTimeout(ok, seconds * 1100));
@@ -96,7 +96,7 @@ class App extends React.Component {
             newCountryCode !== prevStateCountryCode ||
             !(cities.length === 0)
           ) {
-            delayFetch(1);
+            // delayFetch(1);
             fetchCities(newCountryCode);
           }
         }
