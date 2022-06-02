@@ -3,7 +3,7 @@ label {
 }
 #land-input {
   width: calc(3.2rem + 30%);
-  height: calc(2rem - 4px);
+  height: 2rem;
 }
 
 @media only screen and (min-width: 800px) {

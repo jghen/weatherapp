@@ -3,7 +3,7 @@ import "./CountrySearch.css";
 
 const Countries = ({ landSearch, countryArray }) => {
   return (
-    <React.Fragment>
+    <>
       <label htmlFor="land-input"></label>
       <input
         onInput={landSearch}
@@ -23,7 +23,7 @@ const Countries = ({ landSearch, countryArray }) => {
           );
         })}
       </datalist>
-    </React.Fragment>
+    </>
   );
 };
 

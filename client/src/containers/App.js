@@ -28,7 +28,6 @@ class App extends React.Component {
 
   componentDidMount = () => {
     this.fetchCountries();
-    // this.setState({ countryCode: "NO" });
   };
 
   render() {
@@ -48,7 +47,7 @@ class App extends React.Component {
       return new Promise((resolve) => {
         this.setState(state, resolve)
       });
-  }
+    }
 
     const fetchCities = async (code) => {
       
@@ -81,9 +80,7 @@ class App extends React.Component {
       // if (event.type === "click") {
         const cityInput = document.querySelector("#city-input");
         cityInput.value = "";
-        
       // }
-      
 
       if (event.target.value) {
         const countryMatch = countries.filter((country) => {

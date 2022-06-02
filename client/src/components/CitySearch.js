@@ -3,13 +3,10 @@ import "./CitySearch.css";
 
 const CitySearch = ({citySearchSubmit, currentCitySearch, cityArray, isFetching }) => {
 
-  let cities;
   // let citiesIsArray = Array.isArray(cityArray);
   // console.log("cityArray: ",cityArray,"array:",citiesIsArray, 'length ', cityArray.length);
   // console.log("fetching? ", isFetching);
-
-  
-
+  let cities;
   if (cityArray.length > 0) {
     cities = cityArray.map((city, i) => {
       return (
@@ -20,27 +17,21 @@ const CitySearch = ({citySearchSubmit, currentCitySearch, cityArray, isFetching 
     });
   }
 
-
- 
-
   let placeholder = 'By';
   const decidePlaceholder = () => {
-    
     if (isFetching === true) {
-      placeholder = `...Loading`;
+      placeholder = `...Henter data`;
+      return placeholder;
     } 
-    
-    if (isFetching === false) {
-      if (cityArray.length) {
-        placeholder = "Chose a city!";
-      }
-      else if(cityArray.length===undefined) {
-        placeholder='unable to get data'
-      }
-      else {
-        placeholder = 'By'
-      }
-    } 
+    if (cityArray.length) {
+      placeholder = "Velg en by!";
+    }
+    else if(cityArray.length===undefined) {
+      placeholder='Kan ikke hente data..';
+    }
+    else {
+      placeholder = 'By'
+    }
     return placeholder;
   };
 
