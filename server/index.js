@@ -1,9 +1,10 @@
 const express = require("express");
-require('dotenv').config();
-const cors = require('cors');
-const path = require('path');
+require("dotenv").config();
+const cors = require("cors");
+const path = require("path");
 
-const fetch = require('node-fetch');
+const fetch = require("node-fetch");
+const { resourceLimits } = require("worker_threads");
 
 var PORT = process.env.PORT || 5000;
 
@@ -11,85 +12,126 @@ const app = express();
 
 app.use(cors());
 
-app.use(express.static(path.resolve(__dirname, '../client/build')));
+app.use(express.static(path.resolve(__dirname, "../client/build")));
 
-const delayFetch = (seconds) => {
-  return new Promise(ok => setTimeout(ok, seconds * 1100));
-}
+const delayFetchAwait = (seconds) => {
+  console.log("delaying fetch");
+  return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
+};
+const delayFetch = (s) => {
+  setTimeout(() => {
+    console.log("timeout");
+  }, s * 1000);
+};
 
-app.get("/cities", async (req, res) =>{
+
+app.get("/cities", async (req, res) => {
   const countryCode = req.query.q;
   const apiKey = process.env.RAPID_API_KEY;
 
   const options = {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'X-RapidAPI-Host': 'countries-cities.p.rapidapi.com',
-      'X-RapidAPI-Key': apiKey
-    }
+      "X-RapidAPI-Host": "countries-cities.p.rapidapi.com",
+      "X-RapidAPI-Key": apiKey,
+    },
   };
 
-  const results = [];
-  
-  let url = `https://countries-cities.p.rapidapi.com/location/country/${countryCode}/city/list?page=1&per_page=100&population=1501`;
-  let nextPage = "";
-  let totalPages = 1;
-  let thisPage = 1;
- 
   try {
-    do {
-      await delayFetch(1);
-      let response = await fetch(url, options);
-      let data = await response.json();
-      nextPage = data.links.next;
-      totalPages = data.total_pages;
-      thisPage = data.page;
-      url = `https://countries-cities.p.rapidapi.com/location${nextPage}`;
-      results.push(data);
-    } while (totalPages > thisPage);
-    const allCities = results.flatMap((result) => result.cities);
-    // console.log('cities in ', countryCode, ' :',allCities);
-    return res.json(allCities);
+    let url = `https://countries-cities.p.rapidapi.com/location/country/${countryCode}/city/list?page=1&per_page=100&population=1501`;
+    let response = await fetch(url, options);
+    let data = await response.json();
+    await delayFetchAwait(12/10)
+    let totalPages = data.total_pages;
+
+    let result = [];
+    let page = 1;
+
+    let intervalID;
+
+    const fetchCities = () => {
+      delayFetch(75/100);
+      if (page === totalPages) {
+        stopInterval();
+      }
+      // console.log("iteration:", page, "of", totalPages);
+      url = `https://countries-cities.p.rapidapi.com/location/country/${countryCode}/city/list?page=${page}&per_page=100&population=1501`;
+      fetch(url, options)
+        .then(resp => resp.json())
+        .then((city) =>{
+          delayFetch(75/100);
+          result.push(city.cities.flatMap(c=>c));
+          // console.log("typeof cities:",typeof city.cities, city.cities.length, "page:",city.page);
+          // console.log("result: ", result.length, typeof result);
+        })
+        .catch((error) => console.log("Error: ", error));
+      page++;
+    }
+
+    const doInterval = () => {
+      if (!intervalID) {
+        intervalID = setInterval(fetchCities,1500);
+      }
+    }
+
+    function stopInterval() {
+      console.log("stopping interval");
+      clearInterval(intervalID);
+      // release our intervalID from the variable
+      intervalID = null;
+    }
+
+    doInterval();
+
+    await delayFetchAwait(totalPages * 175/100);
+    
+    // console.log("endresult: ", result.length, typeof result);
+    res.json(result.flatMap(city=>city));
   } catch (error) {
-    console.log(error);
-    return res.json(`cities server error: ${error}`);
+    console.log("error server cities!!!: ", error);
+    res.json("error server cities!!!: " + error);
   }
-})
+
+});
 
 function hasSpace(s) {
-  return s.includes(' ');
+  return s.includes(" ");
 }
 
-app.get('/weather', async (req, res) =>{
+app.get("/weather", async (req, res) => {
   let city = req.query.city;
-  let countryCode = req.query.country
-  
-  city = (hasSpace(city)) ? city.split(' ').join('_'): city;
+  let countryCode = req.query.country;
+
+  city = hasSpace(city) ? city.split(" ").join("_") : city;
   const apiKey = process.env.OWM_API_KEY_VALUE;
 
   try {
-    await delayFetch(1);
-    const resp = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city},,${countryCode}&limit=5&appid=${apiKey}`);
+    delayFetch(1);
+    const resp = await fetch(
+      `http://api.openweathermap.org/geo/1.0/direct?q=${city},,${countryCode}&limit=5&appid=${apiKey}`
+    );
     const data = await resp.json();
     const allWeather = await Promise.all(
       data.map(async function (place) {
         delayFetch(1);
-        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${place.lat}&lon=${place.lon}&appid=${apiKey}`);
+        const response = await fetch(
+          `https://api.openweathermap.org/data/2.5/weather?lat=${place.lat}&lon=${place.lon}&appid=${apiKey}`
+        );
         return response.json();
       })
     );
     res.json(allWeather);
   } catch (error) {
     console.log(error);
-    res.json('weather server error' + error)
-  }  
-})
-
-// All other GET requests not handled before will return our React app
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
+    res.json("weather server error" + error);
+  }
 });
 
-app.listen(PORT, ()=>{
+// All other GET requests not handled before will return our React app
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
+});
+
+app.listen(PORT, () => {
   console.log(`server running on port ${PORT}`);
-})
+});

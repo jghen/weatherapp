@@ -38,10 +38,10 @@ class App extends React.Component {
     //     console.log("delaying fetch 1s");
     //   }, seconds * 1100);
     // };
-    const delayFetchAwait = (seconds) => {
-      // console.log("delay fetch");
-      return new Promise((ok) => setTimeout(ok, seconds * 1100));
-    };
+    // const delayFetchAwait = (seconds) => {
+    //   // console.log("delay fetch");
+    //   return new Promise((ok) => setTimeout(ok, seconds * 1100));
+    // };
     
     const setStateAsync = (state) => {
       return new Promise((resolve) => {
@@ -61,12 +61,13 @@ class App extends React.Component {
       try {
         console.log("Fetching: ", code);
         this.setState({isFetchingCities: true});
-        await delayFetchAwait(1);
+        // await delayFetchAwait(1);
         const resp = await fetch(url);
         const data = await resp.json();
         await setStateAsync({isFetchingCities: false});
+        console.log(data);
         return this.setState({ cities: data });
-        
+
       } catch (error) {
         console.log('error: ', error)
         this.setState({ cities: ["error"] });
@@ -123,7 +124,7 @@ class App extends React.Component {
       const url = `/weather?city=${city}&country=${countryCode}`;
 
       try {
-        delayFetchAwait(1);
+        // delayFetchAwait(1);
         const resp = await fetch(url);
         const data = await resp.json();
         return this.setState({ weather: data });
