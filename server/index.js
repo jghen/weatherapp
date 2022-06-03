@@ -83,7 +83,7 @@ app.get("/cities", async (req, res) => {
 
     doInterval();
 
-    await delayFetchAwait(totalPages * 175/100);
+    await delayFetchAwait(totalPages * 20/10);
     
     // console.log("endresult: ", result.length, typeof result);
     res.json(result.flatMap(city=>city));
