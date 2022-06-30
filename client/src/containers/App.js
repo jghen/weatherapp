@@ -26,8 +26,19 @@ class App extends React.Component {
       });
   };
 
-  componentDidMount = () => {
+  componentDidMount = async () => {
     this.fetchCountries();
+    //get initial data
+    const url = `/weather?city=Trondheim&country=NO`;
+
+      try {
+        // delayFetchAwait(1);
+        const resp = await fetch(url);
+        const data = await resp.json();
+        return this.setState({ weather: data });
+      } catch (error) {
+        this.setState({ weather: ["error"] });
+      }
   };
 
   render() {

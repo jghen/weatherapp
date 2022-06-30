@@ -16,7 +16,9 @@ h1 {
   padding: 0;
 }
 p {
-  margin-left: 2%;
+  border: 1px solid red;
+  width: 100%;
+  margin: .5rem auto .5rem 2%;
 }
 .card-content {
   display: flex;
@@ -40,7 +42,6 @@ p {
 
 .weather-img {
   width: 80%;
-  border: 1px solid red;
   position: relative;
   z-index: 1;
   margin-top: -.5rem;
@@ -57,10 +58,11 @@ p {
     width: 90%;
   }
   .weather-img{
-    width: 110%;
+    width: 60%;
   }
   .wind-dir {
     width: 50px;
+    margin-top: -2rem;
   }
 }
 
