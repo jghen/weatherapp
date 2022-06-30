@@ -43,7 +43,7 @@ const Card = ({
     <div className="card">
       <div className="card-content">
         <div className="card-left-container">
-        <h1>{name}</h1>
+        <h1 className="h1-card">{name}</h1>
           <p>{'Temperatur: ' +temp}</p>
           <p>{'Føles som: ' +feelsLike}</p>
           {/* <p>{'Vær: ' + mainWeather}</p> */}
