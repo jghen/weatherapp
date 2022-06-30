@@ -13,8 +13,6 @@ const Card = ({
   weatherDescription,
 }) => {
   
-  
-
    const createImg = () => {
     const weather = mainWeather.toLowerCase();
     const weatherDescr = weatherDescription.toLowerCase().replace(/\s+/g, '');
