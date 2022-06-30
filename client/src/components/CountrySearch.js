@@ -9,7 +9,7 @@ const Countries = ({ landSearch, countryArray }) => {
         onInput={landSearch}
         onKeyDown={landSearch}
         onClick={landSearch}
-        placeholder="Land"
+        placeholder="Kingdom Of Norway"
         id="land-input"
         list="lands"
         autoComplete="on"

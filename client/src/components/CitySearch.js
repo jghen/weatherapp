@@ -17,7 +17,7 @@ const CitySearch = ({citySearchSubmit, currentCitySearch, cityArray, isFetching 
     });
   }
 
-  let placeholder = 'By';
+  let placeholder = 'Trondheim';
   const decidePlaceholder = () => {
     if (isFetching === true) {
       placeholder = `...Henter data`;
