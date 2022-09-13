@@ -44,15 +44,6 @@ class App extends React.Component {
   render() {
     const { weather, countries, cities, countryCode, isFetchingCities } = this.state;
 
-    // const delayFetch = (seconds) => {
-    //   setTimeout(() => {
-    //     console.log("delaying fetch 1s");
-    //   }, seconds * 1100);
-    // };
-    // const delayFetchAwait = (seconds) => {
-    //   // console.log("delay fetch");
-    //   return new Promise((ok) => setTimeout(ok, seconds * 1100));
-    // };
     
     const setStateAsync = (state) => {
       return new Promise((resolve) => {
@@ -63,8 +54,8 @@ class App extends React.Component {
     const fetchCities = async (code) => {
       
       let url = `/cities?q=${code}`;
-      // console.log("this.state.countryCode: ", countryCode);
-      // console.log("passed countryCode", code);
+      console.log("this.state.countryCode: ", countryCode);
+      console.log("passed countryCode", code);
       if (code === countryCode) {
         console.log("FetchCities: returning");
         return;
@@ -72,18 +63,17 @@ class App extends React.Component {
       try {
         console.log("Fetching: ", code);
         this.setState({isFetchingCities: true});
-        // await delayFetchAwait(1);
+        
         const resp = await fetch(url);
         const data = await resp.json();
         await setStateAsync({isFetchingCities: false});
-        console.log(data);
+        console.log('cities:', data);
         return this.setState({ cities: data });
 
       } catch (error) {
         console.log('error: ', error)
         this.setState({ cities: ["error"] });
       }
-      
     };
 
 
@@ -108,7 +98,6 @@ class App extends React.Component {
             newCountryCode !== prevStateCountryCode ||
             !(cities.length === 0)
           ) {
-            // delayFetch(1);
             fetchCities(newCountryCode);
           }
         }

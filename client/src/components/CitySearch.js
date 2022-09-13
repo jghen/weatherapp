@@ -1,36 +1,22 @@
-import React from 'react';
+import React from "react";
 import "./CitySearch.css";
 
-const CitySearch = ({citySearchSubmit, currentCitySearch, cityArray, isFetching }) => {
-
-  // let citiesIsArray = Array.isArray(cityArray);
-  // console.log("cityArray: ",cityArray,"array:",citiesIsArray, 'length ', cityArray.length);
+const CitySearch = ({ citySearchSubmit, currentCitySearch, cityArray, isFetching, }) => {
+  let citiesIsArray = Array.isArray(cityArray); console.log( "cityArray: ", cityArray, "array:", citiesIsArray, "length ", cityArray.length );
   console.log("fetching data: ", isFetching);
-  let cities=null;
-  if (cityArray.length > 0) {
-    cities = cityArray.map((city, i) => {
-      return (
-        <option key={i} value={city.name}>
-          {city.name}
-        </option>
-      );
-    });
-  }
 
-  let placeholder = 'Trondheim';
+  let placeholder = "Trondheim";
   const decidePlaceholder = () => {
     if (isFetching === true) {
       placeholder = `...Henter data`;
       return placeholder;
-    } 
+    }
     if (cityArray.length) {
       placeholder = "Velg en by!";
-    }
-    else if(cityArray.length===undefined) {
-      placeholder='Kan ikke hente data..';
-    }
-    else {
-      placeholder = 'By'
+    } else if (cityArray.length === undefined) {
+      placeholder = "Kan ikke hente data..";
+    } else {
+      placeholder = "By";
     }
     return placeholder;
   };
@@ -46,7 +32,13 @@ const CitySearch = ({citySearchSubmit, currentCitySearch, cityArray, isFetching 
         list="cities"
         autoComplete="on"
       />
-      <datalist id="cities">{cities}</datalist>
+      <datalist id="cities">
+        {cityArray.map((city, i) => (
+          <option key={i} value={city.name}>
+            {city.name}
+          </option>
+        ))}
+      </datalist>
       <button id="search-btn" onClick={citySearchSubmit}>
         Søk
       </button>

@@ -1,6 +1,6 @@
 import React from "react";
 import './Card.css'
-import windPhoto from './img/wind-direction.png';
+import windPhoto from './img/wind-direction.svg';
 
 
 const Card = ({
