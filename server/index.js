@@ -27,31 +27,31 @@ app.get("/cities", async (req, res) => {
   };
 
   try {
-    let url = `https://countries-cities.p.rapidapi.com/location/country/${countryCode}/city/list?page=1&per_page=1000&population=1501`;
-    let response = await fetch(url, options);
-    let data = await response.json();
-    let totalPages = data.total_pages;
+    // let url = `https://countries-cities.p.rapidapi.com/location/country/${countryCode}/city/list?page=1&per_page=1000&population=1501`;
+    // let response = await fetch(url, options);
+    // let data = await response.json();
+    // let totalPages = data.total_pages;
 
     let result = [];
     let page = 1;
+    let totalPages = 1;
 
-    const fetchCities = async () => {
+    while (page <= totalPages) {
+      console.log("iteration:", page, "of", totalPages);
+      url = `https://countries-cities.p.rapidapi.com/location/country/${countryCode}/city/list?page=${page}&per_page=1000&population=1501`;
+      await fetch(url, options)
+        .then((resp) => resp.json())
+        .then((data) => {
+          result.push(data.cities.flatMap((c) => c));
+          // console.log( "typeof cities:", typeof data.cities, "Array?", Array.isArray(data.cities), "page:", data.page );
+          // console.log("result: ", result.length, typeof result);
+          console.log('page', page, 'total pages', totalPages)
+          totalPages = data.total_pages;
+          page++;
+        })
+        .catch((error) => console.log("Error: ", error));
+    }
 
-      while (page <= totalPages) {
-        console.log("iteration:", page, "of", totalPages);
-        url = `https://countries-cities.p.rapidapi.com/location/country/${countryCode}/city/list?page=${page}&per_page=1000&population=1501`;
-        await fetch(url, options)
-          .then((resp) => resp.json())
-          .then((data) => {
-            result.push(data.cities.flatMap(c => c));
-            console.log("typeof cities:",typeof data.cities,'Array?', Array.isArray(data.cities), "page:",data.page);
-            console.log("result: ", result.length, typeof result);
-          })
-          .catch((error) => console.log("Error: ", error));
-        page++;
-      }
-    };
-    await fetchCities();
     res.json(result.flatMap((city) => city));
   } catch (error) {
     console.log("error server cities!!!: ", error);
