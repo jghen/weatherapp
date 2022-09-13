@@ -32,27 +32,32 @@ app.get("/cities", async (req, res) => {
     // let data = await response.json();
     // let totalPages = data.total_pages;
 
-    let result = [];
-    let page = 1;
-    let totalPages = 1;
+    const fetchCities = async () => {
+      let result = [];
+      let page = 1;
+      let totalPages = 1;
 
-    while (page <= totalPages) {
-      console.log("iteration:", page, "of", totalPages);
-      url = `https://countries-cities.p.rapidapi.com/location/country/${countryCode}/city/list?page=${page}&per_page=1000&population=1501`;
-      await fetch(url, options)
-        .then((resp) => resp.json())
-        .then((data) => {
-          result.push(data.cities.flatMap((c) => c));
-          // console.log( "typeof cities:", typeof data.cities, "Array?", Array.isArray(data.cities), "page:", data.page );
-          // console.log("result: ", result.length, typeof result);
-          console.log('page', page, 'total pages', totalPages)
-          totalPages = data.total_pages;
-          page++;
-        })
-        .catch((error) => console.log("Error: ", error));
-    }
+      while (page <= totalPages) {
+        url = `https://countries-cities.p.rapidapi.com/location/country/${countryCode}/city/list?page=${page}&per_page=1000&population=1501`;
+        await fetch(url, options)
+          .then((resp) => resp.json())
+          .then((data) => {
+            result.push(data.cities.flatMap((c) => c));
+            // console.log( "typeof cities:", typeof data.cities, "Array?", Array.isArray(data.cities), "page:", data.page );
+            // console.log("result: ", result.length, typeof result);
+            // console.log("iteration:", page, "of", totalPages);
+            // totalPages = data.total_pages;
+            page++;
+          })
+          .catch((error) => console.log("Error: ", error));
+      }
+      result.flatMap((city) => city);
+      return result.flat();
+    };
 
-    res.json(result.flatMap((city) => city));
+    const theData = await fetchCities();
+    // console.log(theData);
+    res.json(theData);
   } catch (error) {
     console.log("error server cities!!!: ", error);
     res.json("error server cities!!!: " + error);
