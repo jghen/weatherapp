@@ -44,7 +44,6 @@ class App extends React.Component {
   render() {
     const { weather, countries, cities, countryCode, isFetchingCities } = this.state;
 
-    
     const setStateAsync = (state) => {
       return new Promise((resolve) => {
         this.setState(state, resolve)
@@ -52,7 +51,6 @@ class App extends React.Component {
     }
 
     const fetchCities = async (code) => {
-      
       let url = `/cities?code=${code}`;
       console.log("this.state.countryCode: ", countryCode);
       console.log("passed countryCode", code);
