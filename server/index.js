@@ -14,6 +14,10 @@ app.use(cors());
 
 app.use(express.static(path.resolve(__dirname, "../client/build")));
 
+app.get("/", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
+});
+
 app.get("/cities", async (req, res) => {
   const countryCode = req.query.q;
   const apiKey = process.env.RAPID_API_KEY;
@@ -96,9 +100,10 @@ app.get("/weather", async (req, res) => {
 });
 
 // All other GET requests not handled before will return our React app
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
-});
+
+// app.get("*", (req, res) => {
+//   res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
+// });
 
 app.listen(PORT, () => {
   console.log(`server running on port ${PORT}`);
