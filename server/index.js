@@ -15,7 +15,7 @@ app.use(express.static(path.resolve(__dirname, "../client/build")));
 
 app.get("/cities", async (req, res) => {
   const countryCode = req.query.code;
-  const apiKey = process.env.RAPID_API_KEY;
+  const apiKey = process.env.REACT_APP_RAPID_API_KEY;
 
   const options = {
     method: "GET",
@@ -62,7 +62,7 @@ app.get("/weather", async (req, res) => {
   let countryCode = req.query.country;
 
   city = hasSpace(city) ? city.split(" ").join("_") : city;
-  const apiKey = process.env.OWM_API_KEY_VALUE;
+  const apiKey = process.env.REACT_APP_OWM_API_KEY_VALUE;
 
   try {
     const resp = await fetch(
