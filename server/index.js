@@ -81,7 +81,7 @@ app.get("/weather", async (req, res) => {
 
   try {
     const resp = await fetch(
-      `http://api.openweathermap.org/geo/1.0/direct?q=${city},,${countryCode}&limit=5&appid=${apiKey}`
+      `https://api.openweathermap.org/geo/1.0/direct?q=${city},,${countryCode}&limit=5&appid=${apiKey}`
     );
     const data = await resp.json();
     const allWeather = await Promise.all(
