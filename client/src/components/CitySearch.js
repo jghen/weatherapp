@@ -2,7 +2,8 @@ import React from "react";
 import "./CitySearch.css";
 
 const CitySearch = ({ citySearchSubmit, currentCitySearch, cityArray, isFetching, }) => {
-  let citiesIsArray = Array.isArray(cityArray); console.log( "cityArray: ", cityArray, "array:", citiesIsArray, "length ", cityArray.length );
+  let citiesIsArray = Array.isArray(cityArray); 
+  console.log( "cityArray: ", cityArray, "array:", citiesIsArray, "length ", cityArray.length );
   console.log("fetching data: ", isFetching);
 
   let placeholder = "Trondheim";
@@ -13,7 +14,7 @@ const CitySearch = ({ citySearchSubmit, currentCitySearch, cityArray, isFetching
     }
     if (cityArray.length) {
       placeholder = "Velg en by!";
-    } else if (cityArray.length === undefined) {
+    } else if (cityArray.length === 0 || cityArray[0]===null) {
       placeholder = "Kan ikke hente data..";
     } else {
       placeholder = "By";

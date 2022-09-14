@@ -2,7 +2,6 @@ const express = require("express");
 require("dotenv").config();
 const cors = require("cors");
 const path = require("path");
-
 const fetch = require("node-fetch");
 
 var port = process.env.PORT || 5000;
@@ -40,7 +39,7 @@ app.get("/cities", async (req, res) => {
       }
       return result.flat();
     };
-    const theData = await fetchCities();
+    const theData = fetchCities();
     res.json(theData);
   } catch (error) {
     res.json("error server cities!!!: " + error);
