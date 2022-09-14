@@ -52,21 +52,21 @@ class App extends React.Component {
 
     const fetchCities = async (code) => {
       let url = `/cities?code=${code}`;
-      console.log(url);
-      console.log("this.state.countryCode: ", countryCode);
-      console.log("passed countryCode", code);
+      // console.log(url);
+      // console.log("this.state.countryCode: ", countryCode);
+      // console.log("passed countryCode", code);
       if (code === countryCode) {
-        console.log("FetchCities: returning");
+        // console.log("FetchCities: returning");
         return;
       }
       try {
-        console.log("Fetching: ", code);
+        // console.log("Fetching: ", code);
         this.setState({isFetchingCities: true});
         
         const resp = await fetch(url);
         const data = await resp.json();
         await setStateAsync({isFetchingCities: false});
-        console.log('cities:', data);
+        // console.log('cities:', data);
         return this.setState({ cities: data });
 
       } catch (error) {
