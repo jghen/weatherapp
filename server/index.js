@@ -6,11 +6,8 @@ const path = require("path");
 const fetch = require("node-fetch");
 
 var port = process.env.PORT || 5000;
-
 const app = express();
-
 app.use(cors());
-
 app.use(express.static(path.resolve(__dirname, "../client/build")));
 
 app.get("/cities", async (req, res) => {
@@ -31,21 +28,18 @@ app.get("/cities", async (req, res) => {
       let result = [];
       let page = 1;
       let totalPages = 1;
+      let baseUrl = `https://countries-cities.p.rapidapi.com/location/country/`;
 
       while (page <= totalPages) {
-        url = `https://countries-cities.p.rapidapi.com/location/country/${countryCode}/city/list?page=${page}&per_page=1000&population=1501`;
-        await fetch(url, options)
-          .then((resp) => resp.json())
-          .then((data) => {
-            result.push(data.cities.flatMap((c) => c));
-            page++;
-          })
-          .catch((error) => result = error);
+        let url = `${baseUrl}${countryCode}/city/list?page=${page}&per_page=1000&population=1501`;
+        const resp = await fetch(url, options);
+        let {cities, total_pages} = await resp.json();
+        result.push(cities);
+        totalPages = total_pages;
+        page++;
       }
-      // result.flatMap((city) => city);
       return result.flat();
     };
-
     const theData = await fetchCities();
     res.json(theData);
   } catch (error) {
@@ -85,10 +79,9 @@ app.get("/weather", async (req, res) => {
 
 // All other GET requests not handled before will return our React app
 
-app.get("/*", (req, res) => {
+app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
 });
-
 
 app.listen(port, () => {
   console.log(`server running on port ${port}`);
