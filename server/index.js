@@ -23,7 +23,7 @@ app.get("/cities", async (req, res) => {
 
   try {
 
-    const fetchCities = async () => {
+    // const fetchCities = async () => {
       let result = [];
       let page = 1;
       let totalPages = 1;
@@ -37,10 +37,10 @@ app.get("/cities", async (req, res) => {
         totalPages = total_pages;
         page++;
       }
-      return result.flat();
-    };
-    const theData = fetchCities();
-    res.json(theData);
+      res.json(result.flat());
+    // };
+    // const theData = await fetchCities();
+    // res.json(theData);
   } catch (error) {
     res.json("error server cities!!!: " + error);
   }

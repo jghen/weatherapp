@@ -52,6 +52,7 @@ class App extends React.Component {
 
     const fetchCities = async (code) => {
       let url = `/cities?code=${code}`;
+      console.log(url);
       console.log("this.state.countryCode: ", countryCode);
       console.log("passed countryCode", code);
       if (code === countryCode) {
