@@ -16,30 +16,28 @@ app.get("/cities", async (req, res) => {
   const options = {
     method: "GET",
     headers: {
-      "X-RapidAPI-Host": "countries-cities.p.rapidapi.com",
       "X-RapidAPI-Key": apiKey,
-    },
+      "X-RapidAPI-Host": "countries-cities.p.rapidapi.com"
+    }
   };
 
   try {
 
-    // let result = [];
-    // let page = 1;
-    // let totalPages = 1;
-    // let baseUrl = `https://countries-cities.p.rapidapi.com/location/country/`;
+    let result = [];
+    let page = 1;
+    let totalPages = 1;
+    let url;
 
-    // while (page <= totalPages) {
-    //   let url = `${baseUrl}${countryCode}/city/list?page=${page}&per_page=1000&population=1501`;
-    //   const resp = await fetch(url, options);
-    //   let { cities, total_pages } = await resp.json();
-    //   result.push(cities);
-    //   totalPages = total_pages;
-    //   page++;
-    // }
+    while (page <= totalPages) {
+      url = `https://countries-cities.p.rapidapi.com/location/country/${countryCode}/city/list?page=${page}&per_page=1000&format=json&population=1501`;
+      const resp = await fetch(url, options);
+      let { cities, total_pages } = await resp.json();
+      result.push(cities);
+      totalPages = total_pages;
+      page++;
+    }
 
-    // res.json(result.flat());
-
-    res.json(countryCode);
+    res.json(result.flat());
 
   } catch (error) {
     res.json("error server cities!!!: " + error);
