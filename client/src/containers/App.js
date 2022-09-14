@@ -109,7 +109,7 @@ class App extends React.Component {
       if (input && cities.length) {
         this.setState({ citySearch: input });
       }
-      if (event.keyCode === 13) {
+      if (event.key === 'Enter') {
         getWeatherData(input);
         const btn = document.querySelector("#search-btn");
         btn.click();
