@@ -23,24 +23,21 @@ app.get("/cities", async (req, res) => {
 
   try {
 
-      let result = [];
-      let page = 1;
-      let totalPages = 1;
-      let baseUrl = `https://countries-cities.p.rapidapi.com/location/country/`;
+    let result = [];
+    let page = 1;
+    let totalPages = 1;
+    let baseUrl = `https://countries-cities.p.rapidapi.com/location/country/`;
 
-      // while (page <= totalPages) {
-      //   let url = `${baseUrl}${countryCode}/city/list?page=${page}&per_page=1000&population=1501`;
-      //   const resp = await fetch(url, options);
-      //   let {cities, total_pages} = await resp.json();
-      //   result.push(cities);
-      //   totalPages = total_pages;
-      //   page++;
-      // }
-      // res.json(result.flat());
+    while (page <= totalPages) {
       let url = `${baseUrl}${countryCode}/city/list?page=${page}&per_page=1000&population=1501`;
       const resp = await fetch(url, options);
-      let {cities} = await resp.json();
-      res.json(cities);
+      let { cities, total_pages } = await resp.json();
+      result.push(cities);
+      // totalPages = total_pages;
+      page++;
+    }
+
+    res.json(result.flat());
 
   } catch (error) {
     res.json("error server cities!!!: " + error);
