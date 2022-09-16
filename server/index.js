@@ -50,25 +50,26 @@ function hasSpace(s) {
 
 app.get("/weather", async (req, res) => {
   let city = req.query.city;
-  let countryCode = req.query.country;
-
   city = hasSpace(city) ? city.split(" ").join("_") : city;
+  let countryCode = req.query.country;
+  
   const apiKey = process.env.REACT_APP_OWM_API_KEY_VALUE;
+  const baseUrl = 'https://api.openweathermap.org';
 
   try {
-    const resp = await fetch(
-      `https://api.openweathermap.org/geo/1.0/direct?q=${city},,${countryCode}&limit=5&appid=${apiKey}`
-    );
+
+    const resp = await fetch( `${baseUrl}/geo/1.0/direct?q=${city},,${countryCode}&limit=5&appid=${apiKey}`);
     const data = await resp.json();
+
     const allWeather = await Promise.all(
       data.map(async function (place) {
-        const response = await fetch(
-          `https://api.openweathermap.org/data/2.5/weather?lat=${place.lat}&lon=${place.lon}&appid=${apiKey}`
-        );
+        const response = await fetch( `${baseUrl}/data/2.5/weather?lat=${place.lat}&lon=${place.lon}&appid=${apiKey}`);
         return response.json();
       })
     );
+
     res.json(allWeather);
+
   } catch (error) {
     res.json("weather server error" + error);
   }
