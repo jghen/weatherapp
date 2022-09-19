@@ -9,7 +9,7 @@ const Countries = ({ landSearch, countryArray }) => {
         onInput={landSearch}
         onKeyDown={landSearch}
         onClick={landSearch}
-        placeholder="Kingdom Of Norway"
+        placeholder="Land"
         id="land-input"
         list="lands"
         autoComplete="on"
@@ -17,7 +17,7 @@ const Countries = ({ landSearch, countryArray }) => {
       <datalist id="lands">
         {countryArray.map((country, i) => {
           return (
-            <option key={i} value={country.name.official} onClick={landSearch}>
+            <option key={i} id={country.cca2} value={country.name.common} onClick={landSearch}>
               {country.cca2}
             </option>
           );

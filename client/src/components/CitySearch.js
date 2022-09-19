@@ -2,9 +2,9 @@ import React from "react";
 import "./CitySearch.css";
 
 const CitySearch = ({ citySearchSubmit, currentCitySearch, cityArray, isFetching, }) => {
-  let citiesIsArray = Array.isArray(cityArray); 
-  console.log( "cityArray: ", cityArray, "array:", citiesIsArray, "length ", cityArray.length );
-  console.log("fetching data: ", isFetching);
+  // let citiesIsArray = Array.isArray(cityArray); 
+  // console.log( "cityArray: ", cityArray, "array:", citiesIsArray, "length ", cityArray.length );
+  // console.log("fetching data: ", isFetching);
 
   let placeholder = "Trondheim";
   const decidePlaceholder = () => {

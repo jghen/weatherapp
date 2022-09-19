@@ -72,8 +72,8 @@ class App extends React.Component {
     const onLandSearchChange = (event) => {
       let prevStateCountryCode = countryCode;
       // if (event.type === "click") {
-      const cityInput = document.querySelector("#city-input");
-      cityInput.value = "";
+      // const landInput = document.querySelector("#land-input");
+      // landInput.value = "";
       // }
 
       if (!event.target.value) return;
@@ -81,14 +81,17 @@ class App extends React.Component {
       const countryMatch = countries.filter((country) => {
         return event.target.value
           .toLowerCase()
-          .includes(country.name.official.toLowerCase());
+          .includes(country.name.common.toLowerCase());
       });
+
+
       if (countryMatch.length === 1) {
         let newCountryCode = countryMatch[0].cca2;
         this.setState({ countryCode: newCountryCode });
 
-        if (newCountryCode !== prevStateCountryCode && !(cities.length === 0)) {
+        if (newCountryCode !== prevStateCountryCode || cities.length === 0) {
           fetchCities(newCountryCode);
+          
         }
       }
       return false;
