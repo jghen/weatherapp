@@ -18,17 +18,15 @@ class App extends React.Component {
     };
   }
 
-  fetchCountries = () => {
-    fetch("https://restcountries.com/v3.1/all")
+  fetchCountries = async () => {
+    await fetch("https://restcountries.com/v3.1/all")
       .then((resp) => resp.json())
       .then((data) => {
         return this.setState({ countries: data });
       });
   };
 
-  componentDidMount = async () => {
-    this.fetchCountries();
-    //get initial data
+  getInitialWeatherData = async () => {
     const url = `/weather?city=Trondheim&country=NO`;
     try {
       const resp = await fetch(url);
@@ -37,6 +35,11 @@ class App extends React.Component {
     } catch (error) {
       this.setState({ weather: ["error"] });
     }
+  }
+
+  componentDidMount = async () => {
+    await this.fetchCountries();
+    await this.getInitialWeatherData();
   };
 
   render() {
